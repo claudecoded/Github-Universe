@@ -1,0 +1,13 @@
+{
+  "name": "github-universe",
+  "version": "1.0.0",
+  "description": "GitHub Universe is an online metaverse-like dimension that connects developers form all around the word and platforms. Here you can create, share ideas and collaborate..",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}
