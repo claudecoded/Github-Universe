@@ -1,80 +1,49 @@
-import { 
-  engine, 
-  Transform, 
-  MeshRenderer, 
-  PointerEvents, 
-  PointerEventType, 
-  InputAction
-} from '@dcl/sdk/ecs'
-import { Vector3, Quaternion } from '@dcl/sdk/math'
-import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
-import { renderUserInterfaceHUD, isIdeaCardVisible, currentInteractingDev } from './ui'
+// Core rendering engine setup for GitHub Multiverse room layout
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf6f8fa);
 
-export function main() {
-  // Initialize user interface HUD render layers
-  ReactEcsRenderer.setUiRenderer(renderUserInterfaceHUD)
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-  // Base Matte Floor Mesh Structure Setup covering the parcel bounds
-  const structuralFloorContainer = engine.addEntity()
-  Transform.create(structuralFloorContainer, {
-    position: Vector3.create(16, 0, 16),
-    scale: Vector3.create(32, 0.1, 32)
-  })
-  MeshRenderer.setBox(structuralFloorContainer)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+directionalLight.position.set(10, 20, 15);
+scene.add(directionalLight);
 
-  // Position matrix arrays for modern shared interactive tables objects
-  const tablePositions = [
-    Vector3.create(10, 0.5, 12),
-    Vector3.create(22, 0.5, 18),
-    Vector3.create(16, 0.5, 25)
-  ]
-  const randomDevNames = ["Dev_Alpha", "Dev_Octocat", "Dev_Coder99"]
+camera.position.set(0, -8, 10);
+camera.lookAt(0, 0, 0);
 
-  tablePositions.forEach((positionMatrix, index) => {
-    const interactionTableEntity = engine.addEntity()
-    Transform.create(interactionTableEntity, {
-      position: positionMatrix,
-      scale: Vector3.create(2.5, 0.75, 1.8)
-    })
-    MeshRenderer.setBox(interactionTableEntity)
+// Random map system routine selection simulation
+const mapsList = ["LOBBY-ROOM", "REPOSITORY-HUB", "AGILE-BOARD"];
+const selectedMap = mapsList[Math.floor(Math.random() * mapsList.length)];
+document.getElementById("map-text").innerText = `Active Room Map: ${selectedMap}`;
 
-    // Append Pointer Event click sensors triggers onto table nodes meshes
-    PointerEvents.create(interactionTableEntity, {
-      pointerEvents: [
-        {
-          eventType: PointerEventType.PET_DOWN,
-          eventInfo: {
-            button: InputAction.IA_POINTER,
-            hoverText: "Click to share architectural idea code module"
-          }
-        }
-      ]
-    })
+// Building low-poly environment geometry models
+const floorGeo = new THREE.PlaneGeometry(35, 25);
+const floorMat = new THREE.MeshStandardMaterial({ color: 0xe1e4e8, roughness: 0.9 });
+const floor = new THREE.Mesh(floorGeo, floorMat);
+scene.add(floor);
 
-    // Listeners captures triggers response logic for table interactions elements
-    engine.addSystem(() => {
-      const interactionEventResult = PointerEvents.getMutable(interactionTableEntity)
-      if (interactionEventResult && interactionEventResult.pointerEvents) {
-        currentInteractingDev.name = randomDevNames[index]
-        isIdeaCardVisible.value = true
-      }
-    })
-  })
+// Generate modern workspace table meshes shapes items
+const tableGeo = new THREE.BoxGeometry(2.5, 1.8, 0.75);
+const tableMat = new THREE.MeshStandardMaterial({ color: 0x0366d6 });
+const table1 = new THREE.Mesh(tableGeo, tableMat);
+table1.position.set(0, 0, 0.375);
+scene.add(table1);
 
-  // Render alternative active developers tracking pointers as 3D cylinders shapes
-  const pointerCoordinatesTracks = [
-    Vector3.create(12, 1.8, 14),
-    Vector3.create(18, 2.2, 16),
-    Vector3.create(15, 1.9, 22)
-  ]
+// Alternate active peer cursor tracking simulator rendering shapes meshes
+const cursorGeo = new THREE.CylinderGeometry(0, 0.2, 0.6, 4);
+const cursorMat = new THREE.MeshStandardMaterial({ color: 0x2ea44f });
+const mockCursor = new THREE.Mesh(cursorGeo, cursorMat);
+mockCursor.position.set(3, 2, 0.5);
+mockCursor.rotation.x = Math.PI / 4;
+scene.add(mockCursor);
 
-  pointerCoordinatesTracks.forEach((coordinate) => {
-    const alternativeCursorEntity = engine.addEntity()
-    Transform.create(alternativeCursorEntity, {
-      position: coordinate,
-      scale: Vector3.create(0.4, 0.4, 0.4),
-      rotation: Quaternion.fromEulerDegrees(45, 0, 15)
-    })
-    MeshRenderer.setCylinder(alternativeCursorEntity)
-  })
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
 }
+animate();
