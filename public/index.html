@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitVerse - Developer Metaverse Workspace</title>
+    <title>GitVerse - Serverless Developer Metaverse</title>
     <style>
         body {
             margin: 0;
@@ -90,7 +90,7 @@
 
     <div id="ui-layer">
         <h1>GitVerse</h1>
-        <p>A collaborative, low-poly metaverse environment designed for teams.</p>
+        <p>A collaborative, low-poly metaverse environment running completely serverless.</p>
         
         <label for="environment-selector">Select Workspace Room:</label>
         <select id="environment-selector">
@@ -105,7 +105,16 @@
 
     <div id="instruction-toast">Move mouse to guide your 3D cursor. Click input box to chat.</div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <!-- Include Three.js and Firebase Core scripts via CDN modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cloudflare.com",
+          "firebase/app": "https://gstatic.com",
+          "firebase/database": "https://gstatic.com"
+        }
+      }
+    </script>
     <script type="module" src="main.js"></script>
 </body>
 </html>
