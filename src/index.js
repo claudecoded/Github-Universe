@@ -1,4 +1,4 @@
-// Core rendering engine setup for GitHub Multiverse room layout
+// Global rendering engine setup for GitHub Multiverse room layout
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf6f8fa);
 
@@ -16,12 +16,12 @@ scene.add(directionalLight);
 camera.position.set(0, -8, 10);
 camera.lookAt(0, 0, 0);
 
-// Random map system routine selection simulation
+// Random map system selection simulation
 const mapsList = ["LOBBY-ROOM", "REPOSITORY-HUB", "AGILE-BOARD"];
 const selectedMap = mapsList[Math.floor(Math.random() * mapsList.length)];
 document.getElementById("map-text").innerText = `Active Room Map: ${selectedMap}`;
 
-// Building low-poly environment geometry models
+// Building low-poly room environment base
 const floorGeo = new THREE.PlaneGeometry(35, 25);
 const floorMat = new THREE.MeshStandardMaterial({ color: 0xe1e4e8, roughness: 0.9 });
 const floor = new THREE.Mesh(floorGeo, floorMat);
