@@ -1,6 +1,6 @@
 <img width="1370" height="768" alt="image" src="https://github.com/user-attachments/assets/33672bb3-ddbe-4782-8b29-527179559d01" />
 
-A clean, minimal, and fully functional 3D collaborative metaverse workspace tailored specifically for developers. Instead of clunky 3D character avatars, users interact with their peers in real-time using custom **three-dimensional mouse pointers** across beautifully structured, low-poly workspace environments.
+A clean, Decentraland-like fully functional 3D collaborative metaverse workspace tailored specifically for developers. Instead of clunky 3D character avatars, users interact with their peers in real-time using custom **three-dimensional mouse pointers** across beautifully structured, low-poly workspace environments.
 
 ## 🚀 Features
 
