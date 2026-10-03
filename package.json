@@ -1,13 +1,8 @@
 {
   "name": "github-multiverse-lobby",
   "version": "1.0.0",
-  "description": "GitHub Universe is an metaverse-like dimension that allows developers from all plataforms interact, build and deploy ideas in collaborative projects.",
+  "description": "A collaborative decentraland-like workspace dimension for developers from all platforms using active cursors.",
   "scripts": {
-    "start": "decentraland-compiler start",
-    "build": "decentraland-compiler build"
-  },
-  "dependencies": {
-    "@dcl/sdk": "^7.3.24",
-    "@dcl/sdk-commands": "^7.3.24"
+    "build": "mkdir -p dist && cp index.html dist/ && cp -r src dist/ || (mkdir dist && copy index.html dist && xcopy src dist\\src /E /I)"
   }
 }
