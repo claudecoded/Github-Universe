@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Multiverse - Dev Workspace</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #f6f8fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; }
+        #ui-layer { position: absolute; top: 20px; left: 24px; z-index: 10; color: #24292e; background: rgba(255, 255, 255, 0.95); padding: 18px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 280px; border: 1px solid #e1e4e8; }
+        h1 { margin: 0 0 4px 0; font-size: 1.2rem; font-weight: 600; color: #0366d6; font-family: monospace; }
+        p { margin: 0 0 16px 0; font-size: 0.85rem; color: #586069; line-height: 1.4; }
+        #right-panel { position: absolute; top: 20px; right: 24px; z-index: 10; display: flex; gap: 10px; }
+        button { border: none; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; color: white; cursor: pointer; }
+        .btn-green { background-color: #2ea44f; }
+        .btn-blue { background-color: #0366d6; }
+        .btn-dark { background-color: #24292e; }
+        canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+    </style>
+    <script src="https://cloudflare.com"></script>
+</head>
+<body>
+    <div id="ui-layer">
+        <h1>GitHub Multiverse</h1>
+        <p id="map-text">Active Room Map: Loading...</p>
+    </div>
+    <div id="right-panel">
+        <button class="btn-green">Invite peers</button>
+        <button class="btn-blue">Create new lobby</button>
+        <button class="btn-dark">Chat</button>
+    </div>
+    <script type="module" src="src/index.ts"></script>
+</body>
+</html>
