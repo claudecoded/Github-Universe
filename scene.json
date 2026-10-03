@@ -1,16 +1,11 @@
 {
   "main": "bin/index.js",
   "scene": {
-    "parcels": [
-      "0,0",
-      "0,1",
-      "1,0",
-      "1,1"
-    ],
+    "parcels": ["0,0", "0,1", "1,0", "1,1"],
     "base": "0,0"
   },
   "display": {
-    "title": "GitHub Multiverse Lobby",
+    "title": "GitHub Multiverse - Collaborative Workspace Room",
     "favicon": "favicon.ico"
   },
   "allowedMediaHostnames": [],
