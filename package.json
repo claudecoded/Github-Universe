@@ -1,8 +1,0 @@
-{
-  "name": "github-multiverse-lobby",
-  "version": "1.0.0",
-  "description": "A collaborative decentraland-like workspace dimension for developers from all platforms using active cursors.",
-  "scripts": {
-    "build": "mkdir -p dist && cp index.html dist/ && cp -r src dist/ || (mkdir dist && copy index.html dist && xcopy src dist\\src /E /I)"
-  }
-}
