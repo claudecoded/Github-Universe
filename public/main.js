@@ -5,6 +5,11 @@ let scene, camera, renderer;
 let localDeveloperData = null;
 const remoteMeshPointers = {};
 
+// Raycasting interaction management vectors variables
+const interactionRaycaster = new THREE.Raycaster();
+const mousePointerCoordinate = new THREE.Vector2();
+let trackingFloorMesh = null;
+
 // Default available world maps selection catalog list
 const availableMaps = [
   'maps/map_decentraland.json',
@@ -16,56 +21,84 @@ const availableMaps = [
   'maps/map_world_zen.json'
 ];
 
-// Establish real-time persistent network pipeline connection 
 const socket = io();
 
-// Initialize the Three.js viewport context loop environment natively
 function initEngine() {
-  // Create core layout engine scene structure
   scene = new THREE.Scene();
   scene.background = new THREE.Color('#110f1a');
 
-  // Configure viewport projection camera lens metrics parameters
   camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 15, 25);
+  camera.position.set(0, 18, 22);
   camera.lookAt(0, 0, 0);
 
-  // Deploy basic lighting rigs optimizations for laptops integrations
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
   scene.add(ambientLight);
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(10, 20, 10);
+  directionalLight.position.set(10, 25, 10);
   directionalLight.castShadow = true;
-  directionalLight.shadow.mapSize.width = 1024;
-  directionalLight.shadow.mapSize.height = 1024;
   scene.add(directionalLight);
 
-  // Setup client renderer component attachment node layers
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.body.appendChild(renderer.domElement);
 
-  // Core window resize listener response logic
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+  // Core tracking plane: An invisible floor grid to raycast mouse positions onto
+  const floorGeometry = new THREE.PlaneGeometry(100, 100);
+  const floorMaterial = new THREE.MeshBasicMaterial({ visible: false });
+  trackingFloorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+  trackingFloorMesh.rotation.x = -Math.PI / 2; // Places flat horizontally
+  scene.add(trackingFloorMesh);
 
-  // Pick and trigger a random map profile build automatically at launch
+  // Setup Event Listeners
+  window.addEventListener('resize', onWindowResize);
+  window.addEventListener('mousemove', onMouseMoveTrack);
+  setupChatUIListeners();
+
+  // Load random layout at launch state sequence
   const randomInitialMap = availableMaps[Math.floor(Math.random() * availableMaps.length)];
   loadSpecificWorldInstance(randomInitialMap, scene);
 
-  // Launch core graphics loop iteration pipeline execution triggers
   animate();
 }
 
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// Tracks raw mouse moves and converts them to canonical viewport ratios
+function onMouseMoveTrack(event) {
+  mousePointerCoordinate.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mousePointerCoordinate.y = -(event.clientY / window.innerHeight) * 2 + 1;
+}
+
 // ============================================================================
-// CHAT INTERPRETER & INSTANCE NAVIGATOR CONTROLLERS
+// CHAT INTERPRETER HUD EVENT BINDINGS
 // ============================================================================
+function setupChatUIListeners() {
+  const inputElement = document.getElementById('chat-input-field');
+  if (!inputElement) return;
+
+  inputElement.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      const chatBufferText = inputElement.value.trim();
+      if (chatBufferText.length > 0) {
+        if (chatBufferText.startsWith('/world ')) {
+          interpretChatCommand(chatBufferText, scene);
+        } else {
+          console.log(`[CHAT LOG] Local user says: ${chatBufferText}`);
+          // Future hooks implementation: dispatch string tokens to Socket pipelines here
+        }
+        inputElement.value = ''; // Flushes field buffer
+      }
+    }
+  });
+}
+
 function interpretChatCommand(inputBuffer, scene) {
   if (inputBuffer.startsWith('/world ')) {
     const targetWorld = inputBuffer.replace('/world ', '').trim().toLowerCase();
@@ -85,9 +118,9 @@ function interpretChatCommand(inputBuffer, scene) {
 
     console.log(`Redirecting networking layers to standalone private instance: ${targetWorld}`);
     
-    // Purges old structural meshes from the active scene tree safely
-    const blocksToRemove = scene.children.filter(child => child.isMesh && child !== camera);
-    blocksToRemove.forEach(block => scene.remove(block));
+    // Purges old static structural meshes from the scene architecture safety locks
+    const meshesToRemove = scene.children.filter(child => child.isMesh && child !== camera && child !== trackingFloorMesh);
+    meshesToRemove.forEach(mesh => scene.remove(mesh));
     
     loadSpecificWorldInstance(targetMapPath, scene);
   }
@@ -119,14 +152,12 @@ async function loadSpecificWorldInstance(mapFilePath, scene) {
       
       const staticMesh = new THREE.Mesh(blockGeometry, blockMaterial);
       staticMesh.position.set(coordinateX, coordinateY, coordinateZ);
-      
       staticMesh.castShadow = true;
       staticMesh.receiveShadow = true;
       
       if (blockData.label) { 
         staticMesh.userData = { label: blockData.label }; 
       }
-      
       scene.add(staticMesh);
     });
 
@@ -226,47 +257,63 @@ function instantiateNetworkPeerCursor(peerData) {
 // NETWORK LAYER LISTENERS COUPLING
 // ============================================================================
 socket.on('local_registration_success', (assignedIdentity) => {
-  localDeveloperData = assignedIdentity;
-  console.log(`[CORE] Connected to multiverse as local node: ${localDeveloperData.devTag}`);
+localDeveloperData = assignedIdentity;
+console.log([CORE] Connected to multiverse as local node: ${localDeveloperData.devTag});
 });
-
 socket.on('sync_entire_developer_pool', (networkClusterArray) => {
-  networkClusterArray.forEach((remoteDev) => {
-    if (localDeveloperData && remoteDev.id === localDeveloperData.id) return;
-    instantiateNetworkPeerCursor(remoteDev);
-  });
+networkClusterArray.forEach((remoteDev) => {
+if (localDeveloperData && remoteDev.id === localDeveloperData.id) return;
+instantiateNetworkPeerCursor(remoteDev);
 });
-
+});
 socket.on('new_developer_joined', (incomingPeerData) => {
-  instantiateNetworkPeerCursor(incomingPeerData);
+instantiateNetworkPeerCursor(incomingPeerData);
 });
-
 socket.on('peer_cursor_transformed', (transformUpdate) => {
-  const peerRecord = remoteMeshPointers[transformUpdate.id];
-  if (peerRecord) {
-    peerRecord.mesh.position.set(transformUpdate.position.x, transformUpdate.position.y, transformUpdate.position.z);
-    updateTagScreenProjection(peerRecord);
-  }
+const peerRecord = remoteMeshPointers[transformUpdate.id];
+if (peerRecord) {
+peerRecord.mesh.position.set(transformUpdate.position.x, transformUpdate.position.y, transformUpdate.position.z);
+updateTagScreenProjection(peerRecord);
+}
 });
-
 socket.on('developer_left_network', (disconnectedPeerId) => {
-  const targetRecord = remoteMeshPointers[disconnectedPeerId];
-  if (targetRecord) {
-    scene.remove(targetRecord.mesh);
+const targetRecord = remoteMeshPointers[disconnectedPeerId];
+if (targetRecord) {
+scene.remove(targetRecord.mesh);
 targetRecord.domElement.remove();
 delete remoteMeshPointers[disconnectedPeerId];
 }
 });
+function broadcastLocalTransformUpdate(activePositionVector) {
+if (socket && socket.connected && localDeveloperData) {
+socket.emit('update_cursor_transform', {
+position: {
+x: activePositionVector.x,
+y: activePositionVector.y + 0.1,
+z: activePositionVector.z
+}
+});
+}
+}
 // ============================================================================
 // RUNTIME ENGINE LOOP ANIMATION LOOP
 // ============================================================================
 function animate() {
 requestAnimationFrame(animate);
+// RAYCASTING EXECUTION MECHANICS: Casts ray from 2D screen coordinate onto 3D grid surface
+if (trackingFloorMesh && camera) {
+interactionRaycaster.setFromCamera(mousePointerCoordinate, camera);
+const planeIntersections = interactionRaycaster.intersectObject(trackingFloorMesh);
+if (planeIntersections.length > 0) {
+const collisionPoint = planeIntersections[0].point;
+// Broadcasts local coordinates transforms back over the real-time servers pipelines
+broadcastLocalTransformUpdate(collisionPoint);
+}
+}
 // Continuously map the 2D floating names over the active 3D pointers meshes
 Object.values(remoteMeshPointers).forEach(peerRecord => {
 updateTagScreenProjection(peerRecord);
 });
 renderer.render(scene, camera);
 }
-// Fire up the entire runtime infrastructure automatically when DOM content mounts
 window.onload = initEngine;
