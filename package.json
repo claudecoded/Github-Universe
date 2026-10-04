@@ -1,0 +1,15 @@
+{
+  "name": "github-universe",
+  "version": "1.0.0",
+  "description": "GitHub Multiverse is an online Decentraland-like dimension where devs from all platforms can work on interactive maps and explore the dimensions.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "author": "claudecoded",
+  "license": "MIT"
+}
