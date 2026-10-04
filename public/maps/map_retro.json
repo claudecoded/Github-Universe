@@ -1,0 +1,10 @@
+{
+  "themeName": "Retro Contribution Green",
+  "backgroundColor": "#040d04",
+  "blocks": [
+    { "type": "floor", "position": [0, -0.5, 0], "scale":, "color": "#0d1b2a" },
+    { "type": "grid_block", "position": [-2, 0.5, -2], "scale":, "color": "#0e4429", "label": "Low Contribs" },
+    { "type": "grid_block", "position":, "scale":, "color": "#006d32", "label": "Medium Contribs" },
+    { "type": "grid_block", "position": [2, 1.5, 2], "scale":, "color": "#39d353", "label": "High Contribs" }
+  ]
+}
