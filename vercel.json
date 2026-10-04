@@ -1,15 +1,4 @@
 {
-  "version": 2,
-  "public": true,
   "cleanUrls": true,
-  "routes": [
-    {
-      "src": "/src/(.*)",
-      "dest": "/src/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ]
+  "trailingSlash": false
 }
