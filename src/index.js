@@ -48,7 +48,7 @@ const mainTable = new THREE.Mesh(tableGeo, tableMat);
 mainTable.position.set(0, 0, 0.4);
 scene.add(mainTable);
 
-// Add an grid overlay pattern across the floor to guide developers pointers
+// Add a grid overlay pattern across the floor to guide developers pointers
 const gridHelper = new THREE.GridHelper(30, 30, 0xd1d5da, 0xe1e4e8);
 gridHelper.rotation.x = Math.PI / 2;
 gridHelper.position.z = 0.01; // Slightly raised above floor to avoid flickering artifacts
