@@ -88,34 +88,32 @@
         #idea-card h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: #24292e; }
         #idea-card p { margin: 0 0 20px 0; color: #586069; }
     </style>
+    <!-- Injection of static standalone Three.js engine module library -->
     <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
-    <!-- Upper Left Panel Header -->
+    <!-- Upper Left Panel Header Overlay UI -->
     <div id="ui-layer">
         <h1>GitHub Multiverse</h1>
         <p id="map-text">Active Room Map: Loading...</p>
     </div>
 
-    <!-- Upper Right Panel Navigation Buttons -->
+    <!-- Upper Right Panel Workspace Controls Navigation Buttons -->
     <div id="right-panel">
         <button class="btn-green" onclick="alert('Link copied to clipboard! Invite your peers.')">Invite peers</button>
         <button class="btn-blue" onclick="location.reload()">Create new lobby</button>
         <button class="btn-dark" onclick="alert('Opening chat overlay...')">Chat</button>
     </div>
 
-    <!-- Collaborative Shared Idea Interactive Card Popup -->
+    <!-- Collaborative Shared Idea Pop-up Modal Card Container -->
     <div id="idea-card">
         <h3 id="idea-dev">Dev_Octocat</h3>
         <p>I have an architectural idea code module to share with the multiverse!</p>
         <button class="btn-blue" onclick="document.getElementById('idea-card').style.display='none'">Close</button>
     </div>
-    <script type="module" src="src/index.js"></script>
-</body>
-</html>
 
-    <!-- Pointing directly to our clean public directory folder -->
-    <script type="module" src="public/src/index.js"></script>
+    <!-- Core graphics initialization entry script pointing to src directory link module -->
+    <script type="module" src="src/index.js"></script>
 </body>
 </html>
