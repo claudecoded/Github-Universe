@@ -11,6 +11,8 @@
             background-color: #f6f8fa; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             user-select: none; 
+            width: 100vw;
+            height: 100vh;
         }
         #ui-layer { 
             position: absolute; 
@@ -62,6 +64,8 @@
         .btn-green { background-color: #2ea44f; }
         .btn-blue { background-color: #0366d6; }
         .btn-dark { background-color: #24292e; }
+        
+        /* Ensures the 3D graphics layer renders on full screen background boundary */
         canvas { 
             position: absolute; 
             top: 0; 
@@ -70,6 +74,7 @@
             height: 100vh; 
             z-index: 1; 
         }
+        
         #idea-card {
             display: none;
             position: absolute;
@@ -88,18 +93,18 @@
         #idea-card h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: #24292e; }
         #idea-card p { margin: 0 0 20px 0; color: #586069; }
     </style>
-    <!-- Injection of static standalone Three.js engine module library -->
+    <!-- Standalone 3D engine script injection library mapping graphics structures -->
     <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
-    <!-- Upper Left Panel Header Overlay UI -->
+    <!-- Upper Left Panel Header -->
     <div id="ui-layer">
         <h1>GitHub Multiverse</h1>
         <p id="map-text">Active Room Map: Loading...</p>
     </div>
 
-    <!-- Upper Right Panel Workspace Controls Navigation Buttons -->
+    <!-- Upper Right Panel Workspace Navigation Actions Control Buttons -->
     <div id="right-panel">
         <button class="btn-green" onclick="alert('Link copied to clipboard! Invite your peers.')">Invite peers</button>
         <button class="btn-blue" onclick="location.reload()">Create new lobby</button>
@@ -113,7 +118,101 @@
         <button class="btn-blue" onclick="document.getElementById('idea-card').style.display='none'">Close</button>
     </div>
 
-    <!-- Core graphics initialization entry script pointing to src directory link module -->
-    <script type="module" src="src/index.js"></script>
+    <!-- Integrated Core 3D Real-time Render Engine Loop Scripts Logic -->
+    <script>
+        window.addEventListener('load', () => {
+            // 1. GLOBAL WORKSPACE STATES & MAP RANDOMIZER
+            const mapsList = ["LOBBY-ROOM", "REPOSITORY-HUB", "AGILE-BOARD"];
+            const selectedMap = mapsList[Math.floor(Math.random() * mapsList.length)];
+            
+            const mapIndicator = document.getElementById("map-text");
+            if (mapIndicator) {
+                mapIndicator.innerText = `Active Room Map: ${selectedMap}`;
+            }
+
+            // 2. CORE THREE.JS ENGINE VIEWPORT SETUP
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf6f8fa); // Standard clean gray metaverse canvas
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Smooth Studio Office Lighting Settings
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(10, 20, 15);
+            scene.add(directionalLight);
+
+            // Set aerial perspective camera angle looking down at the structural floor
+            camera.position.set(0, -8, 10);
+            camera.lookAt(0, 0, 0);
+
+            // 3. BUILDING META-ROOM GEOMETRIES (LOW-POLY ENVIRONMENTS)
+            // Base Floor Grid Structure
+            const floorGeo = new THREE.PlaneGeometry(35, 25);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0xe1e4e8, roughness: 0.9 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            scene.add(floor);
+
+            // Generate Modern Shared Collaborative Meeting Desk
+            const tableGeo = new THREE.BoxGeometry(4, 2.5, 0.8);
+            const tableMat = new THREE.MeshStandardMaterial({ color: 0x0366d6, roughness: 0.5 }); // GitHub Corporate Blue
+            const mainTable = new THREE.Mesh(tableGeo, tableMat);
+            mainTable.position.set(0, 0, 0.4);
+            scene.add(mainTable);
+
+            // Add an organic low-poly grid layout over the floor bounds
+            const gridHelper = new THREE.GridHelper(30, 30, 0xd1d5da, 0xe1e4e8);
+            gridHelper.rotation.x = Math.PI / 2;
+            gridHelper.position.z = 0.01;
+            scene.add(gridHelper);
+
+            // 4. RENDERING FLOATING PEER CURSORS (MULTIPLAYER POSITION SIMULATORS)
+            const cursorGeo = new THREE.CylinderGeometry(0, 0.25, 0.8, 4);
+            const cursorMat = new THREE.MeshStandardMaterial({ color: 0x2ea44f, roughness: 0.4 }); // GitHub Green
+            const remotePeerCursor = new THREE.Mesh(cursorGeo, cursorMat);
+            remotePeerCursor.position.set(4, 3, 0.6);
+            remotePeerCursor.rotation.x = Math.PI / 4;
+            scene.add(remotePeerCursor);
+
+            // 5. MOUSE EVENT HANDLERS & RAYCASTING INTERACTION
+            const raycaster = new THREE.Raycaster();
+            const mouseVector = new THREE.Vector2();
+
+            window.addEventListener('click', (event) => {
+                mouseVector.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseVector.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                raycaster.setFromCamera(mouseVector, camera);
+                const clickIntersections = raycaster.intersectObject(mainTable);
+
+                if (clickIntersections.length > 0) {
+                    const modalElement = document.getElementById('idea-card');
+                    if (modalElement) modalElement.style.display = 'block';
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Run continuous animation frame render loops execution cycles
+            function runFrameEngineLoop() {
+                requestAnimationFrame(runFrameEngineLoop);
+                
+                if (remotePeerCursor) {
+                    remotePeerCursor.rotation.z += 0.005;
+                }
+                
+                renderer.render(scene, camera);
+            }
+            runFrameEngineLoop();
+        });
+    </script>
 </body>
 </html>
