@@ -1,0 +1,10 @@
+{
+  "themeName": "Upland Real Estate Mapping & Cryptovoxels Gallery",
+  "backgroundColor": "#1a1a1a",
+  "blocks": [
+    { "type": "upland_san_francisco_street", "position": [0, 0.05, 0], "scale": [30, 0.1, 4], "color": "#555555", "label": "Mirrored Real World Geography Boulevard" },
+    { "type": "minted_property_1", "position": [-6, 2, -8], "scale":, "color": "#27ae60", "label": "Upland Minted Property (NFT Deed)" },
+    { "type": "unminted_property_2", "position": [6, 2, -8], "scale":, "color": "#7f8c8d", "label": "Locked Real Estate (Available for Mint)" },
+    { "type": "voxels_vertical_gallery", "position":, "scale":, "color": "#ffffff", "label": "Cryptovoxels Lean Web-GL Art Wall" }
+  ]
+}
