@@ -45,13 +45,13 @@ Clone your repository or download the project files into your chosen directory, 
 npm install
 ```
 
-### 3. Execution
+## 3. Execution
 Launch the Node server environment using the standardized run script:
 ```bash
 npm start
 ```
 
-### 4. Open Interface
+## 4. Open Interface
 Once launched, open up any modern web browser and point your URL navigation directly to:
 ```text
 http://localhost:3000
